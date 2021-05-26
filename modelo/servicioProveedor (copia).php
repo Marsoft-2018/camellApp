@@ -2,15 +2,15 @@
 	//require("Conexion.php");
 	require("votacion.php"); 
 	class ServicioProveedor extends Conectar{
-		private $sql;
+		private $sqlDatos;
 		public $idUsuario;
 		//public $dias = array("Lun","Mar","Mie","Jue","Vie","Sab","Dom"); 
 		public $dias = array("Mon","Tue","Wed","Thu","Fri","Sat","Sun"); 			
 
 		public function cargarProveedores($idServicio){		
-			$this->sql = mysql_query("SELECT pr.* FROM proveedores pr INNER JOIN proveedorservicios ps ON ps.`idProveedor` = pr.`id` WHERE ps.`idServicio` = '$idServicio' AND ps.`activo` = 1 ORDER BY pr.`apellidos`,pr.`nombres`; ");
+			$this->sqlDatos = mysql_query("SELECT pr.* FROM proveedores pr INNER JOIN proveedorservicios ps ON ps.`idProveedor` = pr.`id` WHERE ps.`idServicio` = '$idServicio' AND ps.`activo` = 1 ORDER BY pr.`apellidos`,pr.`nombres`; ");
 
-			$res=mysql_num_rows($this->sql);
+			$res=mysql_num_rows($this->sqlDatos);
 			echo '<h4>Datos de los proveedores relacionados</h4>';
 			echo "<table class='display table table-striped table-hover dataTable no-footer'>";
 			echo 	"<thead>";
@@ -27,7 +27,7 @@
 			echo    "</thead>";
 			echo    "<tbody>";
 			if($res>0){
-				while($rs=mysql_fetch_array($this->sql)){
+				while($rs=mysql_fetch_array($this->sqlDatos)){
 					$objVotos = new Votar();
 					$objVotos->tipoUsuario = "Cliente";	
 					$objVotos->UsuarioCalificado = $rs[0];
@@ -92,16 +92,49 @@
 		}
 
 		public function consultaServicios(){
-			$this->sql = "SELECT c.id as 'idCategoria, c.`nombre` AS 'categoria',  s.`nombre` AS 'servicio', s.id as 'idServicio' FROM servicios s RIGHT JOIN `categorias` c ON c.`id` = s.`idcategoria` ORDER BY categoria, servicio ASC";
-			try {
-				$stm = $this->Conexion->prepare($this->sql);
-				$stm->execute();
-				$datos = $stm->fetchAll(PDO::FETCH_ASSOC);
+			$this->sqlServicio = mysql_query("SELECT c.id, c.`nombre` AS 'categoria',  s.`nombre` AS 'servicio', s.id FROM servicios s RIGHT JOIN `categorias` c ON c.`id` = s.`idcategoria` ORDER BY categoria, servicio ASC");	 
+           return $this->sqlServicio;
+		}
 
-				return $datos;
-			} catch (Exception $e) {
-				echo "Error al consultar los servicios";
-			}	 
+		public function listarSeleccionarServicios(){
+			/*
+				$sqlCat = mysql_query("SELECT id, nombre FROM categorias");
+				
+				echo '<p>Seleccione sus servicios</p>';
+				echo "<select multiple id='servicios' name='servicios' class='listaServicios' style='height:100%;' ondblclick='agregarSeleccionado()'>";
+				while($c = mysql_fetch_array($sqlCat)){
+					echo "<optgroup label='".utf8_encode($c[1])."'>";
+					$this->sqlDatos = mysql_query("SELECT id, nombre FROM servicios WHERE idCategoria = '$c[0]'");
+					while($p = mysql_fetch_array($this->sqlDatos) ){
+						echo "<option value='$p[0]'>".utf8_encode($p[1])."</option>";
+					} 
+					echo "</optgroup>";
+				}
+				echo "</select>";	
+			*/
+							
+			$sqlCat =	$this->consultaServicios();
+			
+			echo "<table>".
+			    "<thead>".
+			      "<tr>".
+			        "<th scope='col'>Categoria</th>".
+			       "<th scope='col'>ID</th>".
+			        "<th scope='col'>Servicios</th>".
+			       "<th scope='col' >Seleccione</th>".
+			     "</tr>".
+			    "</thead>".
+			    "<tbody>";
+		     	while ($r = mysql_fetch_array($sqlCat)) {
+		    		echo "<tr>";
+		      		echo "<td><p>".ucwords(utf8_encode($r[1]))."</p></td>";
+		      		echo "<td>".$r[3]."</td>";
+		      		echo "<td><p>".ucwords(utf8_encode($r[2]))."</p></td>";
+		          echo "<td><input type='checkbox' name='valorServicio' id='valorServicio$r[3]' class='form form-control' value='".$r[0]."' ></td>";
+		    		echo "</tr>";
+		    	}
+		     	echo "</tbody>";
+	      	echo "</table>";
 		}
 
 		public function listarCiudades($idUsuario){
@@ -114,8 +147,8 @@
 			echo "<select multiple id = 'liMunicipios' name = 'liMunicipios' class = 'listaServicios' style='height:100%;' ondblclick = 'agregarMunicipioSeleccionado()'>";
 			while($c = mysql_fetch_array($sqlDep)){
 				echo "<optgroup label='".utf8_encode($c[1])."'>";
-				$this->sql = mysql_query("SELECT id, nombre FROM municipios WHERE idDepto = '$c[0]'");
-				while($p = mysql_fetch_array($this->sql) ){
+				$this->sqlDatos = mysql_query("SELECT id, nombre FROM municipios WHERE idDepto = '$c[0]'");
+				while($p = mysql_fetch_array($this->sqlDatos) ){
 					echo "<option value='$p[0]'>".utf8_encode($p[1])."</option>";
 				} 
 				echo "</optgroup>";
@@ -131,8 +164,8 @@
 			   	$stm->execute();
 			   	$datos = $stm->fetchAll(PDO::FETCH_ASSOC);
 				foreach ($datos as $value) {
-					$this->sql = "SELECT * FROM proveedorservicios WHERE idProveedor = ". $value['id']." and activo =1";
-					$stm = $this->Conexion->prepare($this->sql);
+					$this->sqlDatos = "SELECT * FROM proveedorservicios WHERE idProveedor = ". $value['id']." and activo =1";
+					$stm = $this->Conexion->prepare($this->sqlDatos);
 					$stm->execute();
 					$res = $stm->fetchAll(PDO::FETCH_ASSOC);
 				 	foreach ($res as $row) {
@@ -360,8 +393,8 @@
 							<select multiple name="municipioSeleccionado" id="municipioSeleccionado" class="listaServicios" style="height: 100%;" ondblclick = 'quitarMunicipioSeleccionadoTabla(<?php echo $idProv; ?>)'>	
 								<?php
 
-									$this->sql = mysql_query("SELECT ra.idMunicipio, m.`nombre` FROM rango_accion_servicios ra INNER JOIN municipios m ON m.`id` = ra.`idMunicipio` WHERE ra.idProveedor ='".$idProv."' and ra.`estado` = '1';");
-									while($mun = mysql_fetch_array($this->sql) ){
+									$this->sqlDatos = mysql_query("SELECT ra.idMunicipio, m.`nombre` FROM rango_accion_servicios ra INNER JOIN municipios m ON m.`id` = ra.`idMunicipio` WHERE ra.idProveedor ='".$idProv."' and ra.`estado` = '1';");
+									while($mun = mysql_fetch_array($this->sqlDatos) ){
 										echo "<option value='$mun[0]'>".utf8_encode($mun[1])."</option>";
 									} 
 								?>
@@ -511,7 +544,7 @@
 
 		public function guardarRangoDeAccion($idProv, $municipios){
 			foreach ($municipios as $claveM => $valueM) {
-		        $this->sql = mysql_query("INSERT INTO rango_Accion_Servicios(idProveedor,idMunicipio) VALUES (".$idProv.",".$valueM.")")or die("error al ingresar los datos ".mysql_error());               
+		        $this->sqlDatos = mysql_query("INSERT INTO rango_Accion_Servicios(idProveedor,idMunicipio) VALUES (".$idProv.",".$valueM.")")or die("error al ingresar los datos ".mysql_error());               
 		    }
 		}
 
