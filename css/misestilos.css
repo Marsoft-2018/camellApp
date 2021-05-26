@@ -1,0 +1,284 @@
+.mnuIngreso{
+	position: relative;
+	display: inline-block;
+}
+
+.contenidoIngreso{
+	display: block;
+	z-index: 1050;
+	/*background-color: rgba(22,27,30,0.8);
+	color: #E4E4E4;*/
+	min-width:412px;
+	padding: 20px;	
+	height: 0px;
+	border-radius: 0px 0px 8px 8px; 
+    transition: all 0.6s ease;
+	animation-name: alargar;
+	animation-duration: 0.3s;
+    animation-fill-mode: forwards;
+}
+
+.mailSesion{
+    padding: 25px;
+    font-size: 1.5em;
+    margin-bottom: 50px;
+}
+
+.contrasenaSesion{
+    padding: 25px;
+    font-size: 1.5em;
+    margin-bottom: 50px;
+}
+
+.contenidoIngreso a{
+	color:#1B0133;
+    display: block;	
+}
+
+@-webkit-keyframes alargar {
+    0%   {height: 0px;}
+    100% {height: 350px;}
+}
+
+/*para las votaciones*/
+.codexworld_rating_widget{
+    padding: 0px;
+    margin: 0px;
+    float: left;
+}
+.codexworld_rating_widget li{
+    line-height: 0px;
+    width: 28px;
+    height: 28px;
+    padding: 0px;
+    margin: 0px;
+    margin-left: 2px;
+    list-style: none;
+    float: left;
+    cursor: pointer;
+}
+.codexworld_rating_widget li span{
+    display: none;
+}
+
+#lista{
+  display: none;
+  background: rgba(175,144,246,0.5);
+  width: 95.6%;
+  top: 64.2px;
+  position:absolute;
+  border: 1px solid rgba(25,39,72,0.4);
+  border-radius: 0px;
+  box-shadow: 0px 2px 5px rgba(0,0,0,0.3);
+  z-index: 999;
+}
+
+#lista a{
+    text-decoration: none;
+    letter-spacing: 1.5px;
+}
+
+#lista li{
+  list-style: none;  
+  color: #000;  
+  background: rgba(255,255,255,1);
+  margin: 0px;
+  margin-left: -40px;
+  padding: 4px 20px;
+  transition: 0.5s;
+}
+
+#lista li:hover{
+  background: rgba(25,229,192,0.2);
+  cursor: default;
+}
+
+.listaServicios{
+  width: 100%;
+  padding: 10px;
+  height: 100%;
+
+}
+
+.btnMenu{
+  width: 16.65%;
+  height: 150px;
+  padding: 10px;
+  transition: 0.3s ease;
+}
+
+.btnMenu i{
+  color: #fff;
+  font-size: 2.7em;
+}
+
+.btnMenu:hover{
+  cursor: pointer;  
+}
+
+.nombreUsu{
+  color: #fff;
+  font-size: 1em;
+  float: right;
+  margin-right: 2%;
+  margin-top: -50px;
+  text-transform: uppercase;
+}
+
+#resultado{
+  padding: 10%;
+}
+
+.headerProveedor{
+  background: rgba(1, 106, 205, 0.9);  
+  width: 100%;
+  z-index: 1050;
+
+}
+
+.logoMenuProveedor{
+  background:rgba(17, 126, 195, 0.5);
+}
+
+.menuProveedor{
+  
+}
+
+#liMunicipios
+{
+  border-radius: 10px;
+  color: #2d2d2d; 
+}
+
+#liMunicipios::-webkit-scrollbar-thumb
+{
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+  background-color: rgba(10, 206, 95, 0.9); 
+  color: #2d2d2d; 
+}
+
+#liMunicipios::-webkit-scrollbar-track
+{
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+  background-color: rgba(255, 255, 255, 0.9); 
+}
+
+#liMunicipios::-webkit-scrollbar
+{
+  width: 12px;
+  background-color: #F5F5F5;
+}
+
+
+/* municipios seleccionados */
+#municipioSeleccionado{
+  color: #2d2d2d;
+  border-radius: 10px;
+}
+
+#municipioSeleccionado::-webkit-scrollbar-thumb
+{
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+  background-color: rgba(10, 206, 95, 0.9); 
+  color: #2d2d2d; 
+}
+
+#panelHorario::-webkit-scrollbar
+{
+  width: 12px;
+  border-radius: 10px;
+}
+
+#panelHorario::-webkit-scrollbar-thumb
+{
+  background-color: rgba(10,106,55, 0.9);
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  border: 1px solid #54A349;
+  border-radius: 5px;
+}
+
+/*Botones de radio para clientes y proveedores */
+    /*@import url('https://fonts.googleapis.com/css?family=Lato:400,500,600,700&display=swap'); */
+    *{
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+          font-family: 'Lato', sans-serif;
+    }
+
+    .wrapper{
+          margin: 0 auto;
+          display: inline-flex;
+          background: #fff;
+          height: 100px;
+          width: 100%;
+          align-items: center;
+          justify-content: center;
+          border-radius: 5px;
+          padding: 20px 15px;
+          box-shadow: 5px 5px 30px rgba(0,0,0,0.2);
+    }
+
+    .wrapper .option{
+          background: #fff;
+          height: 100%;
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: space-evenly;
+          margin: 0 10px;
+          border-radius: 5px;
+          cursor: pointer;
+          padding: 0 10px;
+          border: 2px solid lightgrey;
+          transition: all 0.3s ease;
+    }
+    .wrapper .option .dot{
+      height: 20px;
+      width: 20px;
+      background: #d9d9d9;
+      border-radius: 50%;
+      position: relative;
+    }
+  .wrapper .option .dot::before{
+    position: absolute;
+    content: "";
+    top: 4px;
+    left: 4px;
+    width: 12px;
+    height: 12px;
+    background: #0069d9;
+    border-radius: 50%;
+    opacity: 0;
+    transform: scale(1.5);
+    transition: all 0.3s ease;
+  }
+
+  input[type="radio"]{
+    display: none;
+  }
+
+  #option-1:checked:checked ~ .option-1,
+  #option-2:checked:checked ~ .option-2{
+    border-color: #0069d9;
+    background: #0069d9;
+  }
+  #option-1:checked:checked ~ .option-1 .dot,
+  #option-2:checked:checked ~ .option-2 .dot{
+    background: #fff;
+  }
+  #option-1:checked:checked ~ .option-1 .dot::before,
+  #option-2:checked:checked ~ .option-2 .dot::before{
+    opacity: 1;
+    transform: scale(1);
+  }
+  .wrapper .option span{
+    font-size: 20px;
+    color: #808080;
+  }
+  #option-1:checked:checked ~ .option-1 span,
+  #option-2:checked:checked ~ .option-2 span{
+    color: #fff;
+  }
