@@ -82,7 +82,7 @@
 							 		<tbody>
 										<tr>
 											<?php
-							 					foreach ($this->dias as $d) {
+							 					foreach ($obj->dias as $d) {
 							 						echo "<td style='text-align:center;'>".
 							 							"<input type='checkbox' class='form form-control' name='diaSel' value='".$d."' onclick='seleccionDia(this.value)'>".
 							 						"</td>";

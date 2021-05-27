@@ -72,7 +72,6 @@
 		
 	</div>
 </div>
-<input type="hidden" id="usuario" name='usuario' value="<?php echo $_POST["usuario"]; ?>">
 <script type="text/javascript" src="js/proveedor.js"></script>
 <script type="text/javascript" src="../complementos/sweetalert2/sweetalert2.js"></script>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD0L8BsANJeB5NuaBwjccRGAxtFvRf9R8o"></script>
