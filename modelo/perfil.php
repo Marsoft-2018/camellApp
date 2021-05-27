@@ -3,23 +3,22 @@
 		public $tabla;
 		public $usuario;
 		public $nombre;
+		private $datos;
 		private $sql;
-		public function cargarNombre(){
-            $this->sql = "SELECT nombres, apellidos FROM ".$this->tabla." WHERE usuario= ? AND activo='1'"; 
+		public function cargar(){
+            $this->sql = "SELECT * FROM ".$this->tabla." WHERE usuario= ? AND activo='1'"; 
             try {
-				$this->nombre = "Dato no encontrado";
+				$this->datos = "Dato no encontrado";
 			   	$stm = $this->Conexion->prepare($this->sql);
 			   	$stm->bindparam(1,$this->usuario);
 			   	$stm->execute();
-			   	$datos = $stm->fetchAll(PDO::FETCH_ASSOC);
-				foreach ($datos as $value) {
-					$this->nombre = $value['nombres']." ".$value['apellidos'];
-				}
+			   	$this->datos = $stm->fetchAll(PDO::FETCH_ASSOC);
+				
 		    } catch (PDOException $e) {
-				$this->nombre = "Dato no encontrado";
+				$this->datos = "Dato no encontrado";
 		    }           
         	
-			return $this->nombre;            
+			return $this->datos;            
         }
 
         public function cargarDatos($usuario){		

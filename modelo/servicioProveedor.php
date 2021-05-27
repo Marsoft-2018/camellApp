@@ -92,7 +92,7 @@
 		}
 
 		public function consultaServicios(){
-			$this->sql = "SELECT c.id as 'idCategoria, c.`nombre` AS 'categoria',  s.`nombre` AS 'servicio', s.id as 'idServicio' FROM servicios s RIGHT JOIN `categorias` c ON c.`id` = s.`idcategoria` ORDER BY categoria, servicio ASC";
+			$this->sql = "SELECT c.id as 'idCategoria', c.`nombre` AS 'categoria',  s.`nombre` AS 'servicio', s.id as 'idServicio' FROM servicios s RIGHT JOIN `categorias` c ON c.`id` = s.`idcategoria` ORDER BY categoria, servicio ASC";
 			try {
 				$stm = $this->Conexion->prepare($this->sql);
 				$stm->execute();
