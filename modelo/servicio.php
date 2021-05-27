@@ -1,19 +1,22 @@
 <?php 
 	class Servicio extends Conectar{
-		private $sqlServicio;
+		public $id;
+		public $nombre;
+		public $idUsuario;
+		private $sql;
 		public function cargar($categoria){
-			$this->sqlServicio = mysql_query("SELECT * FROM servicios WHERE idcategoria = '$categoria' AND `activo` = 1;");
-			return $this->sqlServicio;
+			$this->sql = mysql_query("SELECT * FROM servicios WHERE idcategoria = '$categoria' AND `activo` = 1;");
+			return $this->sql;
 		}
 
 		public function cargarCombo($categoria){
-			$this->sqlServicio = mysql_query("SELECT * FROM servicios WHERE idcategoria = '$categoria' AND `activo` = 1;");
-			$res=mysql_num_rows($this->sqlServicio);	
+			$this->sql = mysql_query("SELECT * FROM servicios WHERE idcategoria = '$categoria' AND `activo` = 1;");
+			$res=mysql_num_rows($this->sql);	
 			echo "<label>Servicios</label>";
 			echo "<select name='servicios' class='form-control' id='idServicio' >";
 			echo	"<option value=''>Seleccione...</option>";				
 			if($res>0){
-				while($rs=mysql_fetch_array($this->sqlServicio)){
+				while($rs=mysql_fetch_array($this->sql)){
 					echo "<option value='$rs[2]'>".utf8_encode($rs[3])."</option>";
 				}
 			}
@@ -51,20 +54,18 @@
 			$this->cargarLista();
 		}
 
-
-		public  function lista($id) {
-			$this->sqlServicio=mysql_query("SELECT  id  FROM proveedores WHERE  usuario  = '$id'");
-
-
-			while($res=mysql_fetch_array($this->sqlServicio)) {
-				$id = $res[0];
-		 	}
-
-		 	$this->sqlServicio = mysql_query("SELECT  proveedorservicios.`id`,  categorias.`nombre` as 'categoria',  servicios.`nombre` as 'servicio', proveedorservicios.`valor` as 'valor'  FROM proveedorservicios INNER JOIN `servicios` ON (`proveedorservicios`.`idServicio` = `servicios`.`id`) INNER JOIN `categorias`  ON categorias.`id` = servicios.`idcategoria` WHERE proveedorservicios.`idProveedor`='$id';");
-
-		 
-           return $this->sqlServicio;
- 
+		public  function lista() {
+			$this->sql = "SELECT proveedorservicios.`id`, categorias.`nombre` as 'categoria', servicios.`nombre` as 'servicio', proveedorservicios.`valor` as 'valor' FROM proveedorservicios INNER JOIN `servicios` ON (`proveedorservicios`.`idServicio` = `servicios`.`id`) INNER JOIN `categorias` ON categorias.`id` = servicios.`idcategoria` WHERE proveedorservicios.`idProveedor`= (SELECT id FROM proveedores WHERE usuario = ?)";
+			try {
+				$stm = $this->Conexion->prepare($this->sql);
+				$stm->bindparam(1,$this->idUsuario);
+				$stm->execute();
+				$datos = $stm->fetchAll(PDO::FETCH_ASSOC);
+				return $datos;		
+				
+			} catch (Exception $e) {
+				echo "Error en la consulta de los servicios: ".$e;
+			}
 		}
 	}
 

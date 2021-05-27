@@ -62,7 +62,7 @@
  ?>
  		</div>
 			<?php 
-				include 'php/footer.php';	
+				include 'vista/footer.php';	
 			 ?>
 		</div>
 		<script src="complementos/alertifyjs/alertify.js"></script>
