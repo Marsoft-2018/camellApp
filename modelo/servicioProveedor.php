@@ -104,25 +104,6 @@
 			}	 
 		}
 
-		public function listarCiudades($idUsuario){
-			echo '<p>Seleccione lugares</p>';
-			$sqlPais = mysql_query("SELECT pa.`id`,pa.`nombre` FROM paises pa INNER JOIN departamentos d ON pa.`id` = d.`idPais` INNER JOIN municipios m ON d.`id` = m.`idDepto` INNER JOIN proveedores pv ON m.`id` = pv.`idMunicipio` WHERE pv.`usuario` = '$idUsuario'");
-			$sqlDep = "";
-			while($pa = mysql_fetch_array($sqlPais)){
-				$sqlDep = mysql_query("SELECT id, nombre FROM departamentos WHERE idPais = '$pa[0]' ");
-			}			
-			echo "<select multiple id = 'liMunicipios' name = 'liMunicipios' class = 'listaServicios' style='height:100%;' ondblclick = 'agregarMunicipioSeleccionado()'>";
-			while($c = mysql_fetch_array($sqlDep)){
-				echo "<optgroup label='".utf8_encode($c[1])."'>";
-				$this->sql = mysql_query("SELECT id, nombre FROM municipios WHERE idDepto = '$c[0]'");
-				while($p = mysql_fetch_array($this->sql) ){
-					echo "<option value='$p[0]'>".utf8_encode($p[1])."</option>";
-				} 
-				echo "</optgroup>";
-			}
-			echo "</select>";			
-		}
-
 		public function hayServiciosCargados(){			
 			$this->sql = "SELECT id FROM proveedores WHERE usuario = '".$this->idUsuario."'"; 
             try {
