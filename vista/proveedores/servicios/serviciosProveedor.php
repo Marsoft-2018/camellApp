@@ -13,7 +13,7 @@
 					<?php 
 						//_POST['usuario'];							
 						$obj = new ServicioProveedor();
-						$obj->listarSeleccionarServicios();
+						include_once("seleccionar.php");
 					?>
 				</div>
 				<div class='col-md-2' style="padding: 0px; text-align: center;overflow: auto;">
@@ -34,9 +34,19 @@
 				<div class='col-md-5' style="height:300px;padding: 40px 20px;">
 					<?php 
 						//_POST['usuario'];							
-						$obj = new ServicioProveedor();
-						$obj->listarCiudades($this->idUsuario);
+						$objUbicacion = new buscarUbicacion();
+						$objUbicacion->idCiudad = $idCiudad;
 					?>
+					<p>Seleccione lugares</p>
+					<select multiple id = 'liMunicipios' name = 'liMunicipios' class = 'listaServicios' style='height:100%;' ondblclick = 'agregarMunicipioSeleccionado()'>
+					<?php
+						foreach ($objUbicacion->ciudadCercanas as $cities) {
+							?>
+							<option value="<?php echo $cities['id'] ?>"><?php echo $cities['nombre'] ?></option>
+						<?php 
+						}
+					?>
+					</select>
 				</div>
 				<div class='col-md-2' style="padding: 20px; text-align: center;overflow: auto;">
 					<button class="btn btn-primary" id='agregarMunicipio' onclick = 'agregarMunicipioSeleccionado()' style="padding: 20px 30px;margin-top: 40px;">

@@ -2,17 +2,24 @@
   	//include("menuClientes.php");	
 	//include("serviciosDestacados.php");
 	require("modelo/Conexion.php");
-	//require("../modelo/categoria.php");
 	require("modelo/combos.php");
 	require("modelo/servicioProveedor.php");
 	require("modelo/perfil.php");
 	require("modelo/proveedor.php");
+	require("modelo/buscarUbicacion.php");
 ?>
 <?php 
 	$objUsu = new Perfil();
 	$objUsu->tabla = "proveedores";
 	$objUsu->usuario = $_SESSION["usuario"];
-	$nombre = $objUsu->cargarNombre($_SESSION["usuario"]);
+	$nombre = "";
+	$idCiudad = "";
+
+	foreach ($objUsu->cargar() as $value) {
+		$nombre = $value['nombres']." ".$value['apellidos'];
+		$idCuidad = $value['idMunicipio'];
+	}
+	;
 ?>
 
 <div id="home" class="header scroll headerProveedor">

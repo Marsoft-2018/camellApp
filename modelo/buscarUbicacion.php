@@ -1,8 +1,9 @@
 <?php 
     //require "Conexion.php";
-	class buscarUbicacion extends ConectarPDO{
+	class buscarUbicacion extends Conectar{
 		public $idPais;
 		public $idDepartamento;
+		public $idUsuario;
 		public $idCiudad;
 		public $letras;
 		public $lista;
@@ -36,7 +37,7 @@
 		}
 
 		public function paises(){
-			$this->sql = "SELEC * FROM paises ORDER BY nombre";
+			$this->sql = "SELECT * FROM paises ORDER BY nombre";
 			try {
 				$stm = $this->Conexion->prepare($this->sql);
 				$stm->execute();
@@ -48,7 +49,7 @@
 		}
 
 		public function departamentos(){
-			$this->sql = "SELEC * FROM departamentos WHERE idPais = ? ORDER BY nombre";
+			$this->sql = "SELECT * FROM departamentos WHERE idPais = ? ORDER BY nombre";
 			try {
 				$stm = $this->Conexion->prepare($this->sql);
 				$stm->bindparam(1,$this->idPais);
@@ -61,7 +62,7 @@
 		}
 
 		public function ciudades(){
-			$this->sql = "SELECT id, nombre FROM municipios WHERE idDepto = ?");
+			$this->sql = "SELECT id, nombre FROM municipios WHERE idDepto = ?";
 						
 			try {
 				$stm = $this->Conexion->prepare($this->sql);
@@ -74,14 +75,17 @@
 			}
 		}
 
-		public function ciudadUsuario(){
-			$this->sql = "SELEC * FROM departamentos WHERE idPais = ? ORDER BY nombre";
+		public function ciudadCercanas(){
+			$this->sql = "SELECT d.id FROM departamentos d INNER JOIN municipios m ON d.id = m.idDepto WHERE m.id = ?";
 			try {
 				$stm = $this->Conexion->prepare($this->sql);
-				$stm->bindparam(1,$this->idPais);
+				$stm->bindparam(1,$this->idCiudad);
 				$stm->execute();
 				$datos = $stm->fetchAll(PDO::FETCH_ASSOC);
-				return $datos;
+				foreach($datos as $value){
+					$this->idDepartamento = $value['id'];
+					$this->ciudades();
+				}				
 			} catch (Exception $e) {
 				echo "Error: ".$e;
 			}
