@@ -105,20 +105,14 @@
 		}
 
 		public function hayServiciosCargados(){			
-			$this->sql = "SELECT id FROM proveedores WHERE usuario = '".$this->idUsuario."'"; 
+			$this->sql = "SELECT * FROM proveedorservicios WHERE idProveedor = (SELECT id FROM proveedores WHERE usuario = ?) AND activo =1"; 
             try {
 			   	$stm = $this->Conexion->prepare($this->sql);
-			   	$stm->bindparam(1,$this->usuario);
+			   	$stm->bindparam(1,$this->idUsuario);
 			   	$stm->execute();
 			   	$datos = $stm->fetchAll(PDO::FETCH_ASSOC);
 				foreach ($datos as $value) {
-					$this->sql = "SELECT * FROM proveedorservicios WHERE idProveedor = ". $value['id']." and activo =1";
-					$stm = $this->Conexion->prepare($this->sql);
-					$stm->execute();
-					$res = $stm->fetchAll(PDO::FETCH_ASSOC);
-				 	foreach ($res as $row) {
-						return true;
-					}
+					return true;					
 				}
 		    } catch (PDOException $e) {
 				echo "Dato no encontrado";

@@ -1,5 +1,6 @@
 <?php 
 	$objSerProveedor = new ServicioProveedor();
+	$objSerProveedor->idUsuario = $_SESSION['usuario'];
 	if($objSerProveedor->hayServiciosCargados()){
 		include("servicios/p3.php");
 	}else{
