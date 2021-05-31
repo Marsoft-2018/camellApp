@@ -3,10 +3,20 @@
 		public $id;
 		public $nombre;
 		public $idUsuario;
+		public $idCategoria;
 		private $sql;
-		public function cargar($categoria){
-			$this->sql = mysql_query("SELECT * FROM servicios WHERE idcategoria = '$categoria' AND `activo` = 1;");
-			return $this->sql;
+		public function cargar(){
+			$this->sql = "SELECT * FROM servicios WHERE idcategoria = '$categoria' AND `activo` = 1";
+			try {
+				$stm = $this->Conexion->prepare($this->sql);
+				$stm->bindparam(1,$this->idCategoria);
+				$stm->execute();
+				$datos = $stm->fetchAll(PDO::FETCH_ASSOC);
+				return $datos;
+			} catch (PDOException $e) {
+				echo "Error en los servicios: ".$e;
+				
+			}	
 		}
 
 		public function cargarCombo($categoria){

@@ -3,6 +3,7 @@
   require("../modelo/Conexion.php");
   require("../modelo/servicioProveedor.php");
   require ("../modelo/servicio.php");
+  require("../modelo/buscarUbicacion.php");
 
 	$accion = 0;
 
@@ -18,7 +19,7 @@
 		$objSC = new ServicioProveedor();
 		$objSC->cargarProveedores($idServicio);
 	}elseif($accion == 'cargarProgramacionServicios'){   
-    $usuario  = $_POST['idUsuario'];    
+    $usuario  = $_SESSION['usuario'];    
     $objSC = new ServicioProveedor(); 
     $objSC->idUsuario = $usuario;
     $objSC->vistaServiciosP1();
@@ -41,19 +42,19 @@
     $obj->idUsuario = $usuario;
     $obj->guardar($usuario, $servicios, $municipios, $dias, $horas);    
   }elseif($accion == "quitarMunicipio"){
-    $usuario  = $_POST['idUsuario'];
-    $municipios = $_POST['municipios'];
-
     $obj = new ServicioProveedor();
-    $obj->idUsuario = $usuario;
-    $obj->quitarMunicipio($usuario, $municipios);
-  }elseif($accion == "ponerMunicipio"){
-    $usuario  = $_POST['idUsuario'];
-    $municipios = $_POST['municipios'];
+    $obj->idUsuario = $_SESSION['id'];
+    $obj->idCiudad = $_POST['ciudad'];
+    $obj->quitarMunicipio();
+    include("../vista/proveedores/servicios/ubicacion.php");
 
+  }elseif($accion == "agregarMunicipio"){
     $obj = new ServicioProveedor();
-    $obj->idUsuario = $usuario;
-    $obj->ponerMunicipio($usuario, $municipios);
+    $obj->idUsuario = $_SESSION['id'];
+    $obj->idCiudad = $_POST['ciudad'];
+    $obj->ponerMunicipio();
+    include("../vista/proveedores/servicios/ubicacion.php");
+
   }elseif($accion == "quitarDia"){
     $usuario  = $_POST['idUsuario'];
     $dia = $_POST['dia'];

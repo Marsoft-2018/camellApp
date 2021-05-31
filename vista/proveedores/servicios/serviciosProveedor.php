@@ -1,64 +1,90 @@
 <?php 
+if (isset($_POST['accion'])) {
+	if ($_POST['accion']=="cargarProgramacion") {
+		require("../../../modelo/Conexion.php");
+		require("../../../modelo/combos.php");
+		require("../../../modelo/categoria.php");
+		require("../../../modelo/servicio.php");
+		require("../../../modelo/servicioProveedor.php");
+		require("../../../modelo/perfil.php");
+		require("../../../modelo/proveedor.php");
+		require("../../../modelo/buscarUbicacion.php");
+		$objSerProveedor = new ServicioProveedor();
+		$objSerProveedor->idUsuario = $_SESSION['usuario'];
+	}
+}else{
 	$objSerProveedor = new ServicioProveedor();
 	$objSerProveedor->idUsuario = $_SESSION['usuario'];
-	if($objSerProveedor->hayServiciosCargados()){
-		include("servicios/p3.php");
-	}else{
+}
+	// $objSerProveedor = new ServicioProveedor();
+	// $objSerProveedor->idUsuario = $_SESSION['usuario'];
+	// if($objSerProveedor->hayServiciosCargados()){
+	// }
 ?>
 	<div id="programacion">
         <h3>PLANEACIÓN DE LOS SERVICIOS </h3>
         <span id="marcoServicios">
-           	<div class='row'>
-        		<h2>1.) Escoge tus Servicios</h2>                 		
-				<div class='col-md-5' style="height:300px;padding: 40px 20px; overflow: auto;">
-					<?php 
-						//_POST['usuario'];							
-						$obj = new ServicioProveedor();
-						include_once("seleccionar.php");
-					?>
+        	<h2 style="width: 100%;">1.) Escoge tus Servicios</h2> 	
+           	<div class='row'>	
+				<div class='col-md-5'>
+					<label for="">Categoria</label>
+					<select name='categorias' class='form-control' id='categoriaServicio' onchange='buscarServicios(this.value)'>
+						<option value=''>Seleccione...</option>
+						<?php 
+							$objCategoria = new Categoria();
+							foreach($objCategoria->listar() as $rs){
+						?>
+						<option value="<?php echo $rs['id'] ?>"><?php echo $rs['nombre'] ?></option>
+					<?php } ?>
+					</select>
+				</div>
+				<div class='col-md-5'>
+					<label for="">Servicios</label>
+					<select name='servicios' class='form-control' id='idServicio'>
+						<option value=''>Seleccione...</option>			
+					</select>
 				</div>
 				<div class='col-md-2' style="padding: 0px; text-align: center;overflow: auto;">
-					<button class="btn btn-primary" id='agregar' onclick="agregarSeleccionado()" style="padding: 20px 30px;margin-top: 40px;">
-						<i class="fa fa-angle-double-right"></i> 
+					<button class="btn btn-primary" id='agregar' onclick="agregarSeleccionado()" style="padding: 5px 30px;margin-top: 30px;">
+						<i class="fa fa-plus">Agregar</i> 
 					</button>
-					<button class="btn btn-primary" id='quitar' style="padding: 20px 30px;margin-top: 40px;"><i class="fa fa-angle-double-left"></i> </button>
-				</div>
-				<div class='col-md-5' style="height:300px; padding: 40px 20px;">
-					<p>Servicios Seleccionados</p>
-					<select multiple name="servicioSeleccionado" id="servicioSeleccionado" class="listaServicios" ondblclick = 'quitarSeleccionado()' style="height: 100%;">								
-						
-					</select>
 				</div>
 			</div>
-			<div class='row'>
-				<h2>2.) Escoge el lugar donde prestarás tus servicios</h2> 
-				<div class='col-md-5' style="height:300px;padding: 40px 20px;">
-					<?php 
-						//_POST['usuario'];							
-						$objUbicacion = new buscarUbicacion();
-						$objUbicacion->idCiudad = $idCiudad;
-					?>
-					<p>Seleccione lugares</p>
-					<select multiple id = 'liMunicipios' name = 'liMunicipios' class = 'listaServicios' style='height:100%;' ondblclick = 'agregarMunicipioSeleccionado()'>
-					<?php
-						foreach ($objUbicacion->ciudadCercanas as $cities) {
-							?>
-							<option value="<?php echo $cities['id'] ?>"><?php echo $cities['nombre'] ?></option>
+			<div class="row">
+				<div class="col-ms-12">
+					<?php include("lista.php") ?>
+				</div>
+			</div>			
+			<h2>2.) Escoge el lugar donde prestarás tus servicios</h2> 		
+           	<div class='row'>	
+				<div class='col-md-5'>
+					<label for="">Departamento</label>
+					<select name='departamento' class='form-control' id='idDepartamento' onchange='cargarCiudad(this.value)'>
+						<option value=''>Seleccione...</option>
 						<?php 
-						}
-					?>
+							$objDepartamento = new buscarUbicacion();
+							$objDepartamento->idPais = 1;
+							foreach($objDepartamento->departamentos() as $rs){
+						?>
+						<option value="<?php echo $rs['id'] ?>"><?php echo $rs['nombre'] ?></option>
+					<?php } ?>
 					</select>
 				</div>
-				<div class='col-md-2' style="padding: 20px; text-align: center;overflow: auto;">
-					<button class="btn btn-primary" id='agregarMunicipio' onclick = 'agregarMunicipioSeleccionado()' style="padding: 20px 30px;margin-top: 40px;">
-						<i class="fa fa-angle-double-right"></i> 
+				<div class='col-md-5'>
+					<label for="">Ciudad/Municipio</label>
+					<select name='ciudad' class='form-control' id='ciudad'>
+						<option value=''>Seleccione...</option>			
+					</select>
+				</div>
+				<div class='col-md-2' style="padding: 0px; text-align: center;overflow: auto;">
+					<button class="btn btn-primary" id='agregar'  onclick = 'agregarMunicipioSeleccionado()' style="padding: 5px 30px;margin-top: 25px;">
+						<i class="fa fa-plus">Agregar</i> 
 					</button>
-					<button class="btn btn-primary" id='quitarMunicipio' onclick='quitarMunicipioSeleccionado()' style="padding: 20px 30px;margin-top: 40px;"><i class="fa fa-angle-double-left"></i> </button>
 				</div>
-				<div class='col-md-5' style="height:300px; padding: 40px 20px;">
-					<p>Lugares Seleccionados</p>
-					<select multiple name="municipioSeleccionado" id="municipioSeleccionado" class="listaServicios" style="height: 100%;" ondblclick = 'quitarMunicipioSeleccionado()'>								
-					</select>
+			</div>			
+			<div class="row">
+				<div class="col-ms-12" id="listaCiudades">
+					<?php include("ubicacion.php") ?>
 				</div>
 			</div>
 			<div class='row'>
@@ -152,4 +178,4 @@
 		</span>	
 <?php 
 
-} ?>
+?>

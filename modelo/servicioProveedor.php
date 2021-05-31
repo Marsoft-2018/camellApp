@@ -495,25 +495,29 @@
 			//echo "Se actualizó el valor";			
 		}
 
-		public function quitarMunicipio($idProv,$municipio){
-			$sqlLista = mysql_query("UPDATE rango_Accion_Servicios SET estado = '2' WHERE `idProveedor`='$idProv' AND idMunicipio = $municipio;");
-			//echo "Se actualizó el valor";
+		public function quitarMunicipio(){
+			$sqlLista = mysql_query(";");
+			$this->sql = "UPDATE rango_Accion_Servicios SET estado = '2' WHERE `idProveedor`= ? AND idMunicipio = ?";
+		    try {
+		    	$stm = $this->Conexion->prepare($this->sql);
+		    	$stm->bindparam(1,$this->idUsuario);
+		    	$stm->bindparam(2,$this->idCiudad);
+		    	$stm->execute();
+		    } catch (Exception $e) {
+		    	echo "Error: ".$e;
+		    }
 		}
 
-		public function ponerMunicipio($idProv,$municipios){
-			foreach ($municipios as $claveM => $valueM) {
-		        
-		        $sqlExiste = mysql_query("SELECT * FROM rango_accion_servicios WHERE idProveedor = '".$idProv."' AND idMunicipio	= '".$valueM."';");
-		        $res = mysql_num_rows($sqlExiste);
-		        if($res > 0){
-					$sqlActualiza = mysql_query("UPDATE rango_Accion_Servicios SET estado = '1' WHERE `idProveedor`='$idProv' AND idMunicipio = ".$valueM.";".mysql_error());  
-		        }else{
-		        	//echo "Esta listo para insertar $idProv ".$valueM;
- 					$sqlIngresa = mysql_query("INSERT INTO rango_Accion_Servicios(idProveedor,idMunicipio) VALUES (".$idProv.",".$valueM.")")or die("error al ingresar los datos ".mysql_error());
-		        }
-		                
+		public function ponerMunicipio(){			
+			$this->sql = "INSERT INTO rango_Accion_Servicios(idProveedor,idMunicipio) VALUES (?, ?)";
+		    try {
+		    	$stm = $this->Conexion->prepare($this->sql);
+		    	$stm->bindparam(1,$this->idUsuario);
+		    	$stm->bindparam(2,$this->idCiudad);
+		    	$stm->execute();
+		    } catch (Exception $e) {
+		    	echo "Error: ".$e;
 		    }
-			//echo "Se actualizó el valor";
 		}
 		
 		public function quitarDia($dia){

@@ -3,6 +3,8 @@
 	//include("serviciosDestacados.php");
 	require("modelo/Conexion.php");
 	require("modelo/combos.php");
+	require("modelo/categoria.php");
+	require("modelo/servicio.php");
 	require("modelo/servicioProveedor.php");
 	require("modelo/perfil.php");
 	require("modelo/proveedor.php");

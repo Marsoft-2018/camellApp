@@ -22,13 +22,13 @@
 				    	$nombre = $registro['Id']." - ".$registro['Municipio']." - ".$registro['Dpto']." - ".$registro['Pais'];
 
 				     // Aquì, agregaremos opciones
-				        echo '<span>'
-				            	.'<a href="#mvto">'
-					             	.'<li onclick="set_item(\''.$nombre.'\')">'
-					             		.'<span>'.$nombre.'</span>'
-					             	.'</li>'
-					            ."</a>"
-					          .'</span>';
+			        echo '<span>'
+			            	.'<a href="#mvto">'
+				             	.'<li onclick="set_item(\''.$nombre.'\')">'
+				             		.'<span>'.$nombre.'</span>'
+				             	.'</li>'
+				            ."</a>"
+				          .'</span>';
 				    }
                 }
             }catch(PDOException $e){
@@ -62,11 +62,11 @@
 		}
 
 		public function ciudades(){
-			$this->sql = "SELECT id, nombre FROM municipios WHERE idDepto = ?";
+			$this->sql = "SELECT id, nombre FROM municipios WHERE idDepartamento = ?";
 						
 			try {
 				$stm = $this->Conexion->prepare($this->sql);
-				$stm->bindparam(1,$this->idDepartemeno);
+				$stm->bindparam(1,$this->idDepartamento);
 				$stm->execute();
 				$datos = $stm->fetchAll(PDO::FETCH_ASSOC);
 				return $datos;
@@ -91,6 +91,18 @@
 			}
 		}
 
+		public function cargarLugares(){
+			$this->sql = "SELECT d.`nombre` as departamento, ra.idMunicipio , m.`nombre` as municipio FROM rango_accion_servicios ra INNER JOIN municipios m ON m.`id` = ra.`idMunicipio` INNER JOIN departamentos d ON d.`id` = m.`idDepartamento` WHERE ra.idProveedor = ? AND ra.`estado` = '1'";						
+			try {
+				$stm = $this->Conexion->prepare($this->sql);
+				$stm->bindparam(1,$this->idUsuario);
+				$stm->execute();
+				$datos = $stm->fetchAll(PDO::FETCH_ASSOC);
+				return $datos;
+			} catch (Exception $e) {
+				echo "Error: ".$e;
+			}
+		}
 	}
 ?>
 

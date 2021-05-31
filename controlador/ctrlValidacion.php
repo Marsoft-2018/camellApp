@@ -15,16 +15,11 @@
 
   switch ($accion) {
     case 'validar':
-      //echo $_POST["usuario"]."<br>";
-      //echo $_POST["contrasena"]."<br>";
-      //echo $_POST["tipo"]."<br>";
       if (isset($_POST["usuario"])){
         $objUsuario = new Usuario();
-        $objUsuario->usuario = $_POST["usuario"];
-        $objUsuario->contrasena = $_POST["contrasena"];
+        $objUsuario->setDatos($_POST["usuario"],$_POST["contrasena"]);
         $objUsuario->tipo = $_POST["tipo"];
         echo json_encode($objUsuario->Validar());
-        //echo $objUsuario->Validar();
       } 
       break;
 
