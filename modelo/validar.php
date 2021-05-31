@@ -1,8 +1,11 @@
 <?php
-    //require "Conexion.php";	
+    //require "Conexion.php";
+    include ("encript.php");
+
+
 	class Usuario extends Conectar{		
-        public $usuario;
-        public $contrasena;
+        private $usuario;
+        private $contrasena;
         public $tipo;
         private $foto;
         private $nombre;
@@ -13,23 +16,26 @@
             if($this->tipo === "clientes"){
                 $this->sql = "SELECT us.id, us.usuario, us.contrasena FROM usuariosclientes us WHERE us.`usuario`= '".$this->usuario."' AND us.`contrasena`= AES_ENCRYPT('".$this->contrasena."','Makers2018') AND us.`activo`='1' ";                
             }elseif($this->tipo === "proveedores"){
-                $this->sql = "SELECT us.id,us.usuario,us.contrasena FROM usuariosproveedores us WHERE us.`usuario`= '".$this->usuario."' AND us.`contrasena`= AES_ENCRYPT('".$this->contrasena."','Makers2018') AND us.`activo`='1' ";
+                $this->sql = "SELECT * FROM proveedores WHERE `usuario`= ? AND `contrasena`= ? AND `activo`='1' ";
             }
 
             try {
                 $this->resultado['mensaje'] = ["Usuario '".$this->usuario."' no pudo ser encontrado en nuestros ".$this->tipo.", lo invitamos a registrarse presionando en botón registrate"];
                 $this->resultado['estado'] = [0];
 				$stm = $this->Conexion->prepare($this->sql);
+                $stm->bindparam(1,$this->usuario);
+                $stm->bindparam(2,$this->contrasena);
 				$stm->execute();
 				$datos = $stm->fetchAll(PDO::FETCH_ASSOC);
 				foreach ($datos as $value) {
-					//$_SESSION['nombre'] = $value['nombre'];
+					$_SESSION['nombre'] = $value['nombres'];
 					// $_SESSION['direccion'] = $value['direccion'];
 					// $_SESSION['telefono'] = $value['telefono'];
-					// $_SESSION['foto'] = $value['foto'];
+					$_SESSION['foto'] = $value['foto'];
 					// $_SESSION['estado'] = $value['estado'];
 					// $_SESSION['fecha_reg'] = $value['fecha_reg'];
 					$_SESSION['usuario'] = $value['usuario'];
+                    $_SESSION['id'] = $value['id'];
 					$_SESSION['contrasena'] = $this->contrasena;
 					$_SESSION['rol'] = $this->tipo;
 					
@@ -61,8 +67,6 @@
             }
             return $this->resultado;
         }//ok
-
-          
 
         public function mostrarFoto($usuario){
             $sqlFoto=mysql_query("SELECT ft.`foto` FROM fotoUsuarios ft INNER JOIN usuarios us ON ft.`idUsuario`=us.`idUsuario` WHERE us.`idUsuario`='$usuario' AND us.`estado`='Activo'");
@@ -293,6 +297,11 @@
                 $pass .= substr($cadena,$pos,1);
             }
             return $pass;
+        }
+
+        public function setDatos($us, $pass){
+            $this->usuario = $us;
+            $this->contrasena = SED::encryption($pass);
         }
 
         function __destruc(){

@@ -11,7 +11,25 @@ function cargarDepartamentos(idPais){
 }
 
 function cargarCiudad(idDepartamento){
-	$("#espacioCiudad").load("controlador/ctrlUbicacion.php",{accion:'cargarCiudades',idDepartamento:idDepartamento});
+	$("#ciudad").html("");
+    $("#ciudad").append("<option value=''>Seleccione...</option>");
+    // var accion='cargarCursos';
+    // var profe='Todos';
+    $.ajax({
+        type: 'POST',
+        url: "controlador/ctrlUbicacion.php",
+        data: {accion:"cargarCiudades", idDepartamento:idDepartamento},
+        dataType: 'json',
+        success: function(response){
+            //console.log(response);
+            $.each(response, function(index, item) {
+                $("#ciudad").append("<option value='"+item.id+"'>"+item.nombre+"</option>");                
+            });
+        },
+        error: function(data){
+            alertify.error("error","Error al cargar las ciudades");
+        }
+    });
 }
 
 function cargarRegistro(){
@@ -340,37 +358,6 @@ function addRegistro(){
 	return false;
 }
 
-function validarUsuario(){
-	var tipo = $('input:radio[name=tipo]:checked').val();
-	var correo = $("#correoSesion").val();
-	var contrasenha = $("#contrasenaSesion").val();
-		
-	var datos = {
-		"usuario" : correo,
-		"contrasena" : contrasenha,
-    	"tipo"	: tipo
-	}
-
-	$.ajax({
-		url : "controlador/ctrlValidacion.php",
-		type : "post",
-		data : datos,
-		cache : false,
-		success : function(respuesta){
-			//alert("la respuesta es: "+respuesta);
-			if(respuesta){
-                  cargarUsuario(correo,contrasenha,tipo);
-	          }else{
-	              alertify.alert("!ERROR AL INGRESAR!","<br>Usted no se encuentra registrado por favor registrese para porder ingresar a Makers");
-	          }
-		},
-		error: function(status,err){
-			alert("! ocurrio un error "+error);
-		},
-	});
-
-}
-
 function logear() {
 	var tipo = $('input:radio[name=tipo]:checked').val();
 	var correo = $("#usuario").val();
@@ -386,15 +373,11 @@ function logear() {
         type:"POST",
         data: datos,
         url:"controlador/ctrlValidacion.php",
-        success:function(data){
-            data = JSON.parse(data);
-			
-            //data = JSON.parse(data);
-            console.log('Mensaje: '+data["mensaje"]);
-            //console.log(data);
+        success:function(data){        	
+            data = JSON.parse(data);			
+            
 			$("#mensajeValidacion1").html(data["mensaje"]);
-            // respuesta = respuesta.trim();
-            // console.log(respuesta);
+            
             if(data["estado"] == 1) {
                 window.location="inicio.php";
             }else{

@@ -23,9 +23,10 @@
         $objDepartamento->comboDepartamento($idPais);
 	}
 	elseif($accion == 'cargarCiudades'){
-		$idDepartamento = $_POST["idDepartamento"];
-		$objCiudad = new ubicacion();
-        $objCiudad->comboCiudad($idDepartamento);
+		$obj = new buscarUbicacion();
+		$obj->idDepartamento = $_POST["idDepartamento"];
+        echo json_encode($obj->ciudades());
+        
 	}elseif($accion == 'cargarUbicacion'){
 		$objUbicacion = new buscarUbicacion();
 		$objUbicacion->Cargar($_POST["palabra"]);

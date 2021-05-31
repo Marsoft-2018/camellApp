@@ -1,6 +1,8 @@
  <?php 
   	class Categoria extends Conectar{
-	  	public $sqlCategoria;
+  		public $id;
+  		public $nombre;
+	  	private $sql;
 	  	public  function NuevaCategoria(){
 	  		echo "<div class='col-md-4'>";
 				echo "	<label for=''>Nombre Categoria:</label>";
@@ -17,18 +19,17 @@
 				echo "</div>";
 	  	}
 
-	  	public function cargarLista(){
-			$this->sqlCategoria=mysql_query("SELECT `id`,`nombre` FROM `categorias` WHERE `activo` =1 ORDER BY `nombre`");
-			$res=mysql_num_rows($this->sqlCategoria);	
-			echo "<label>Categoria del servicio</label>";
-			echo "<select name='categorias' class='form-control' id='categoriaServicio' onchange='buscarServicios(this.value)'>";
-			echo	"<option value=''>Seleccione...</option>";				
-			if($res>0){
-				while($rs=mysql_fetch_array($this->sqlCategoria)){
-					echo "<option value='$rs[0]'>".utf8_encode($rs[1])."</option>";
-				}
-			}
-			echo "</select>";
+	  	public function listar(){
+			$this->sql = "SELECT  id , nombre FROM categorias WHERE activo = 1 ORDER BY  nombre";
+			try {
+				$stm = $this->Conexion->prepare($this->sql);
+				$stm->execute();
+				$datos = $stm->fetchAll(PDO::FETCH_ASSOC);
+				return $datos;
+			} catch (PDOException $e) {
+				echo "Error en las categorias: ".$e;
+				
+			}			
 		}
 
  		// agregar categoria

@@ -8,8 +8,14 @@
 
 	echo '<div id="blog" class="blog">';
 	$objUsu = new Perfil();
+	$objUsu->usuario = $_SESSION["usuario"];
 	$objUsu->tabla = "clientes";
-	$nombre = $objUsu->cargarNombre($_SESSION["usuario"]);
+	$nombre = "";
+	foreach ($objUsu->cargar() as $value) {
+		$nombre = $value['nombres']." ".$value['apellidos'];
+		$idCuidad = $value['idMunicipio'];
+	}
+
 	echo "<h4>Bienvenido: ".$nombre."</h4>";
 	echo '<div class="container" style="padding:50px;padding-top:0px;padding-bottom:250px;">';
 	echo 	"<h3> SOLICITUD DE SERVICIOS </h3>";

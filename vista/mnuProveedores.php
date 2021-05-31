@@ -3,6 +3,8 @@
 	//include("serviciosDestacados.php");
 	require("modelo/Conexion.php");
 	require("modelo/combos.php");
+	require("modelo/categoria.php");
+	require("modelo/servicio.php");
 	require("modelo/servicioProveedor.php");
 	require("modelo/perfil.php");
 	require("modelo/proveedor.php");
@@ -36,7 +38,7 @@
 		//echo date("D");
 	?>		
 </div>
-<div class="top-banner-grids wow bounceInUp menuProveedor" data-wow-delay="0.4s">
+<div class="top-banner-grids wow bounceInLeft menuProveedor" data-wow-delay="0.4s">
 	<div class="banner-grid-cuadrado banner-grid-active text-center scroll btnMenu" id='cargarProgramacionServicios' onclick="cargarProgramacionServicios()">
 		<span class="top-icon1"> </span>
 		<h3>Programacion de Servicios</h3>

@@ -3,7 +3,7 @@
 	$objServicio->idUsuario = $_SESSION['usuario'];
    	//$resul = array();
 ?>
-<h3> LISTA DE SUS SERVICIOS </h3>
+<h3> LISTA DE SERVICIOS AGREGADOS </h3>
 <table class='table table-striped'>
     <thead>
       <tr>
@@ -26,7 +26,7 @@
   				<p><?php echo strtoupper($value['categoria']) ?></p>
   			</td>
   			<td>
-  				<p><?php echo strtoupper(utf8_encode($value['servicio'])) ?></p>
+  				<p><?php echo strtoupper($value['servicio']) ?></p>
   			</td>
       		<td>
       			<input type="number" name="valorServicio" id="valorServicio<?php echo $value['id'] ?>" class="form form-control" value="<?php echo $value['valor'] ?>" placeholder="Valor del Servicio">

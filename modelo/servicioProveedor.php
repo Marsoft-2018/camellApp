@@ -104,40 +104,15 @@
 			}	 
 		}
 
-		public function listarCiudades($idUsuario){
-			echo '<p>Seleccione lugares</p>';
-			$sqlPais = mysql_query("SELECT pa.`id`,pa.`nombre` FROM paises pa INNER JOIN departamentos d ON pa.`id` = d.`idPais` INNER JOIN municipios m ON d.`id` = m.`idDepto` INNER JOIN proveedores pv ON m.`id` = pv.`idMunicipio` WHERE pv.`usuario` = '$idUsuario'");
-			$sqlDep = "";
-			while($pa = mysql_fetch_array($sqlPais)){
-				$sqlDep = mysql_query("SELECT id, nombre FROM departamentos WHERE idPais = '$pa[0]' ");
-			}			
-			echo "<select multiple id = 'liMunicipios' name = 'liMunicipios' class = 'listaServicios' style='height:100%;' ondblclick = 'agregarMunicipioSeleccionado()'>";
-			while($c = mysql_fetch_array($sqlDep)){
-				echo "<optgroup label='".utf8_encode($c[1])."'>";
-				$this->sql = mysql_query("SELECT id, nombre FROM municipios WHERE idDepto = '$c[0]'");
-				while($p = mysql_fetch_array($this->sql) ){
-					echo "<option value='$p[0]'>".utf8_encode($p[1])."</option>";
-				} 
-				echo "</optgroup>";
-			}
-			echo "</select>";			
-		}
-
 		public function hayServiciosCargados(){			
-			$this->sql = "SELECT id FROM proveedores WHERE usuario = '".$this->idUsuario."'"; 
+			$this->sql = "SELECT * FROM proveedorservicios WHERE idProveedor = (SELECT id FROM proveedores WHERE usuario = ?) AND activo =1"; 
             try {
 			   	$stm = $this->Conexion->prepare($this->sql);
-			   	$stm->bindparam(1,$this->usuario);
+			   	$stm->bindparam(1,$this->idUsuario);
 			   	$stm->execute();
 			   	$datos = $stm->fetchAll(PDO::FETCH_ASSOC);
 				foreach ($datos as $value) {
-					$this->sql = "SELECT * FROM proveedorservicios WHERE idProveedor = ". $value['id']." and activo =1";
-					$stm = $this->Conexion->prepare($this->sql);
-					$stm->execute();
-					$res = $stm->fetchAll(PDO::FETCH_ASSOC);
-				 	foreach ($res as $row) {
-						return true;
-					}
+					return true;					
 				}
 		    } catch (PDOException $e) {
 				echo "Dato no encontrado";
@@ -520,25 +495,29 @@
 			//echo "Se actualizó el valor";			
 		}
 
-		public function quitarMunicipio($idProv,$municipio){
-			$sqlLista = mysql_query("UPDATE rango_Accion_Servicios SET estado = '2' WHERE `idProveedor`='$idProv' AND idMunicipio = $municipio;");
-			//echo "Se actualizó el valor";
+		public function quitarMunicipio(){
+			$sqlLista = mysql_query(";");
+			$this->sql = "UPDATE rango_Accion_Servicios SET estado = '2' WHERE `idProveedor`= ? AND idMunicipio = ?";
+		    try {
+		    	$stm = $this->Conexion->prepare($this->sql);
+		    	$stm->bindparam(1,$this->idUsuario);
+		    	$stm->bindparam(2,$this->idCiudad);
+		    	$stm->execute();
+		    } catch (Exception $e) {
+		    	echo "Error: ".$e;
+		    }
 		}
 
-		public function ponerMunicipio($idProv,$municipios){
-			foreach ($municipios as $claveM => $valueM) {
-		        
-		        $sqlExiste = mysql_query("SELECT * FROM rango_accion_servicios WHERE idProveedor = '".$idProv."' AND idMunicipio	= '".$valueM."';");
-		        $res = mysql_num_rows($sqlExiste);
-		        if($res > 0){
-					$sqlActualiza = mysql_query("UPDATE rango_Accion_Servicios SET estado = '1' WHERE `idProveedor`='$idProv' AND idMunicipio = ".$valueM.";".mysql_error());  
-		        }else{
-		        	//echo "Esta listo para insertar $idProv ".$valueM;
- 					$sqlIngresa = mysql_query("INSERT INTO rango_Accion_Servicios(idProveedor,idMunicipio) VALUES (".$idProv.",".$valueM.")")or die("error al ingresar los datos ".mysql_error());
-		        }
-		                
+		public function ponerMunicipio(){			
+			$this->sql = "INSERT INTO rango_Accion_Servicios(idProveedor,idMunicipio) VALUES (?, ?)";
+		    try {
+		    	$stm = $this->Conexion->prepare($this->sql);
+		    	$stm->bindparam(1,$this->idUsuario);
+		    	$stm->bindparam(2,$this->idCiudad);
+		    	$stm->execute();
+		    } catch (Exception $e) {
+		    	echo "Error: ".$e;
 		    }
-			//echo "Se actualizó el valor";
 		}
 		
 		public function quitarDia($dia){

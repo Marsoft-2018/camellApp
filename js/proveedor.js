@@ -7,13 +7,37 @@ var diasSel = new Array();
 var horasSel = new Array();
 
 function cargarProgramacionServicios(){
-  var idUsuario = $("#usuario").val();
-  $("#programacion").load("controlador/ctrlServiciosProveedor.php",{accion:"cargarProgramacionServicios",idUsuario:idUsuario});
+  // var idUsuario = $("#usuario").val();
+  // $("#programacion").load("controlador/ctrlServiciosProveedor.php",{accion:"cargarProgramacionServicios",idUsuario:idUsuario});
+    $.ajax({
+    type:"POST",
+    url: "vista/proveedores/servicios/serviciosProveedor.php",
+    data:{accion:"cargarProgramacion"},
+    success:function(data){
+      $("#resultado").html(data);
+    },
+    error:function(err){
+      console.log('test: '+err);
+    }
+
+  });
 }
 
 $("#cargarProgramacionServicios").click(function(){
-  var idUsuario = $("#usuario").val();
-  $("#programacion").load("controlador/ctrlServiciosProveedor.php",{accion:"cargarProgramacionServicios",idUsuario:idUsuario});
+  // var idUsuario = $("#usuario").val();
+  // $("#programacion").load("controlador/ctrlServiciosProveedor.php",{accion:"cargarProgramacionServicios",idUsuario:idUsuario});
+  $.ajax({
+    type:"POST",
+    url: "vista/proveedores/servicios/serviciosProveedor.php",
+    data:{accion:"cargarProgramacion"},
+    success:function(data){
+      $("#resultado").html(data);
+    },
+    error:function(err){
+      console.log('test: '+err);
+    }
+
+  });
 });
 
 $('#servicio').click(function () {
@@ -117,29 +141,32 @@ function quitarSeleccionado(){
 }
 
 function agregarMunicipioSeleccionado(){
-  $('#liMunicipios option:selected').each(function(){ 
-    municipiotxt.push($(this).text()); 
-    municipiovalue.push($(this).val()); 
-  }); 
-
-  for(i=0; i<municipiovalue.length; i++){
-    //console.log(municipiovalue[i]+" "+municipiotxt[i]);
-    if ( $('#municipioSeleccionado option[value="' + municipiovalue[i] + '"]').length === 0 ){
-        $('#municipioSeleccionado').append($('<option>', {value: municipiovalue[i], text: municipiotxt[i] }));
+  var ciudad = $("#ciudad").val();
+  $.ajax({
+    type : "POST",
+    url  : "controlador/ctrlServiciosProveedor.php",
+    data:{accion:"agregarMunicipio", ciudad:ciudad},
+    success:function(data){
+      $("#listaCiudades").html(data);
+    },
+    error:function(err){
+      console.log('test: '+error);
     }
-  }
+  })
 }
 
-function quitarMunicipioSeleccionado(){
-  var valor = $('#municipioSeleccionado option:selected').val();
-  var clave = municipiovalue.indexOf(valor);
-  municipiotxt.splice(clave,1); 
-  municipiovalue.splice(clave,1);
-  for(i=0; i<municipiovalue.length; i++){
-    //console.log(municipiovalue[i]+" "+municipiotxt[i]);    
-  }
-
-  $('#municipioSeleccionado option[value="' + valor + '"]').remove();  
+function quitarMunicipioSeleccionado(ciudad){
+  $.ajax({
+    type : "POST",
+    url  : "controlador/ctrlServiciosProveedor.php",
+    data:{accion:"quitarMunicipio", ciudad:ciudad},
+    success:function(data){
+      $("#listaCiudades").html(data);
+    },
+    error:function(err){
+      console.log('test: '+error);
+    }
+  })  
 }
 
 function seleccionDia(dia){
