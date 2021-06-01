@@ -182,9 +182,7 @@ function seguridadClave(clave){
 		$("#nivelSeguridad").removeClass("progress-bar-warning");
 		$("#nivelSeguridad").addClass("progress-bar-success");
 		$("#nivelSeguridad").text("Excelente");
-	}
-
-	
+	}	
 }
 
 function confirmContrasena(){
@@ -211,7 +209,6 @@ function confirmContrasena(){
 
 	return resultado;
 }
-
 
 function buscarUsuario(usuario){
 	$("#mensajeValidacion1").slideDown("fast");
@@ -292,12 +289,12 @@ function mostrarMapa2(){
 		map:objMapa
 	});
 
-/*
-	var marcador3 = new google.maps.Marker({
-		position:{lat:9.719157, lng:-75.125455},
-		map:objMapa
-	});
-*/
+	/*
+		var marcador3 = new google.maps.Marker({
+			position:{lat:9.719157, lng:-75.125455},
+			map:objMapa
+		});
+	*/
 }
 
 function registroPaso2(){
@@ -404,13 +401,23 @@ function cargarUsuario(idUsu,contrasena,tipo){
 	} 	
 }
 
-function buscarServicios(cat){
-	$("#divSubCategoria").load("controlador/ctrlValidacion.php",
-    	{
-    		accion:"cargarServicios",
-    		idCategoria:cat
-    	}
-    );
+function buscarServicios(idCategoria){	
+    $.ajax({
+        type: 'POST',
+        url: "controlador/ctrlServiciosProveedor.php",
+        data: {accion:"cargarServicios", idCategoria:idCategoria},
+        dataType: 'json',
+        success: function(response){
+            //console.log(response);
+            $.each(response, function(index, item) {
+                $("#cmb_servicios").append("<option value='"+item.id+"'>"+item.nombre+"</option>");                
+            });
+        },
+        error: function(data){
+            alertify.error("error","Error al cargar las ciudades");
+        }
+    });
+
 }
 
 function cargarProveedoresServicios(){

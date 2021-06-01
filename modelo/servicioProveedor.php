@@ -4,6 +4,8 @@
 	class ServicioProveedor extends Conectar{
 		private $sql;
 		public $idUsuario;
+		public $idServicio;
+		public $valor;
 		//public $dias = array("Lun","Mar","Mie","Jue","Vie","Sab","Dom"); 
 		public $dias = array("Mon","Tue","Wed","Thu","Fri","Sat","Sun"); 			
 
@@ -454,21 +456,21 @@
 			<?php
 		}
 
-		public function guardar($usuario, $servicios, $municipios, $dias, $horas){
-			$sqlProv = mysql_query("SELECT id FROM proveedores WHERE usuario = '".$usuario."'");
-			$idProv;
-			while($id = mysql_fetch_array($sqlProv)){
-				$idProv = $id[0];
-			}
-
-			foreach ($servicios as $clave => $value) {
-				$sqlServicios = mysql_query("INSERT INTO proveedorservicios(idProveedor, idServicio) VALUES('".$idProv."','".$value."')");					      	        
-		    }	
-		    
-		    $this->guardarDisponibilidadDias($idProv, $dias);
-		    $this->guardarDisponibilidadHoras($idProv, $horas);
-		    $this->guardarRangoDeAccion($idProv, $municipios);
-		    $this->vistaServiciosP2();
+		public function guardar(){
+			$this->sql = "INSERT INTO proveedorservicios(idProveedor, idServicio,valor) VALUES(?, ?, ?)";
+			try {
+				$stm = $this->Conexion->prepare($this->sql);
+				$stm->bindparam(1,$this->idUsuario);	
+				$stm->bindparam(2,$this->idServicio);
+				$stm->bindparam(3,$this->valor);
+				if($stm->execute()){
+					return true;
+				}else{
+					return false;
+				}
+			} catch (Exception $e) {
+				echo "Error: ".$e;
+			}		    
 		}
 
 		public function guardarDisponibilidadDias($idProv, $dias){

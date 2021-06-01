@@ -6,16 +6,15 @@
 		public $idCategoria;
 		private $sql;
 		public function cargar(){
-			$this->sql = "SELECT * FROM servicios WHERE idcategoria = '$categoria' AND `activo` = 1";
+			$this->sql = "SELECT * FROM servicios WHERE id = ? AND activo = 1";
 			try {
 				$stm = $this->Conexion->prepare($this->sql);
-				$stm->bindparam(1,$this->idCategoria);
+				$stm->bindparam(1,$this->id);
 				$stm->execute();
 				$datos = $stm->fetchAll(PDO::FETCH_ASSOC);
 				return $datos;
 			} catch (PDOException $e) {
-				echo "Error en los servicios: ".$e;
-				
+				echo "Error en los servicios: ".$e;				
 			}	
 		}
 
@@ -65,10 +64,24 @@
 		}
 
 		public  function lista() {
-			$this->sql = "SELECT proveedorservicios.`id`, categorias.`nombre` as 'categoria', servicios.`nombre` as 'servicio', proveedorservicios.`valor` as 'valor' FROM proveedorservicios INNER JOIN `servicios` ON (`proveedorservicios`.`idServicio` = `servicios`.`id`) INNER JOIN `categorias` ON categorias.`id` = servicios.`idcategoria` WHERE proveedorservicios.`idProveedor`= (SELECT id FROM proveedores WHERE usuario = ?)";
+			$this->sql = "SELECT proveedorservicios.`id`, categorias.`nombre` as 'categoria', servicios.`nombre` as 'servicio', proveedorservicios.`valor` as 'valor' FROM proveedorservicios INNER JOIN `servicios` ON (`proveedorservicios`.`idServicio` = `servicios`.`id`) INNER JOIN `categorias` ON categorias.`id` = servicios.`idcategoria` WHERE proveedorservicios.`idProveedor`= ?";
 			try {
 				$stm = $this->Conexion->prepare($this->sql);
 				$stm->bindparam(1,$this->idUsuario);
+				$stm->execute();
+				$datos = $stm->fetchAll(PDO::FETCH_ASSOC);
+				return $datos;		
+				
+			} catch (Exception $e) {
+				echo "Error en la consulta de los servicios: ".$e;
+			}
+		}
+
+		public  function listarPorCategoria() {
+			$this->sql = "SELECT * FROM servicios WHERE idCategoria = ? ORDER BY nombre ASC";
+			try {
+				$stm = $this->Conexion->prepare($this->sql);
+				$stm->bindparam(1,$this->idCategoria);
 				$stm->execute();
 				$datos = $stm->fetchAll(PDO::FETCH_ASSOC);
 				return $datos;		

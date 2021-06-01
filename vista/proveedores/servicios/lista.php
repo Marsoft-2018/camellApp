@@ -1,6 +1,6 @@
 <?php 
 	$objServicio = new  Servicio();
-	$objServicio->idUsuario = $_SESSION['usuario'];
+	$objServicio->idUsuario = $_SESSION['id'];
    	//$resul = array();
 ?>
 <h3> LISTA DE SERVICIOS AGREGADOS </h3>

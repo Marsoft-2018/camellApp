@@ -11,8 +11,8 @@ function cargarProgramacionServicios(){
   // $("#programacion").load("controlador/ctrlServiciosProveedor.php",{accion:"cargarProgramacionServicios",idUsuario:idUsuario});
     $.ajax({
     type:"POST",
-    url: "vista/proveedores/servicios/serviciosProveedor.php",
-    data:{accion:"cargarProgramacion"},
+    url: "controlador/ctrlServiciosProveedor.php",
+    data:{accion:"cargarProgramacionServicios"},
     success:function(data){
       $("#resultado").html(data);
     },
@@ -23,29 +23,12 @@ function cargarProgramacionServicios(){
   });
 }
 
-$("#cargarProgramacionServicios").click(function(){
-  // var idUsuario = $("#usuario").val();
-  // $("#programacion").load("controlador/ctrlServiciosProveedor.php",{accion:"cargarProgramacionServicios",idUsuario:idUsuario});
-  $.ajax({
-    type:"POST",
-    url: "vista/proveedores/servicios/serviciosProveedor.php",
-    data:{accion:"cargarProgramacion"},
-    success:function(data){
-      $("#resultado").html(data);
-    },
-    error:function(err){
-      console.log('test: '+err);
-    }
-
-  });
-});
-
 $('#servicio').click(function () {
 	var usuario = $("#usuario").val();  
 	cargarServicio(usuario);
 });
 
-function  cargarServicio(usuario){
+function cargarServicio(usuario){
 	//alertify.alert("Esta todo ok el usuario es: "+usuario);	
 	$("#programacion").load("controlador/ctrlServiciosProveedor.php",{accion:"cargarListaProveedor", idUsuario:usuario});
 	/*
@@ -67,7 +50,6 @@ function  cargarServicio(usuario){
   	});
 	*/
 }
-
 
 function ventanaFlotante() { 
    swal({
@@ -115,17 +97,19 @@ $('#servicios option').dblclick(function(){ agregarSeleccionado(); });
 $('#servicioSeleccionado option').dblclick(function(){  quitarSeleccionado(); });
 
 function agregarSeleccionado(){
-  $('#servicios option:selected').each(function(){ 
-    serviciotxt.push($(this).text()); 
-    serviciovalue.push($(this).val()); 
-  }); 
-
-  for(i=0; i<serviciovalue.length; i++){
-    console.log(serviciovalue[i]+" "+serviciotxt[i]);
-    if ( $('#servicioSeleccionado option[value="' + serviciovalue[i] + '"]').length === 0 ){
-        $('#servicioSeleccionado').append($('<option>', {value: serviciovalue[i], text: serviciotxt[i] }));
+  var idServicio = $("#cmb_servicios").val();
+  var valor = $("#valorServicio").val();
+  $.ajax({
+    type:"POST",
+    url: "controlador/ctrlServiciosProveedor.php",
+    data:{accion:"guardarServicios", idServicio:idServicio, valor:valor},
+    success:function(data){
+      $("#listaServicios").html(data);
+    },
+    error:function(err){
+      console.log('test: '+err);
     }
-  }
+  });
 }
 
 function quitarSeleccionado(){
@@ -199,7 +183,6 @@ function seleccionHora(hora){
         //console.log("Horas: "+horasSel);       
     }
 }
-
 
 function guardarServiciosProveedor(){
   var usuario = $("#usuario").val();

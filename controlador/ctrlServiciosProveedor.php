@@ -1,9 +1,13 @@
 <?php 
 	session_start();
-  require("../modelo/Conexion.php");
-  require("../modelo/servicioProveedor.php");
+
+  require ("../modelo/Conexion.php");
+  require ("../modelo/categoria.php");
   require ("../modelo/servicio.php");
-  require("../modelo/buscarUbicacion.php");
+  require ("../modelo/servicioProveedor.php");
+  require ("../modelo/perfil.php");
+  require ("../modelo/proveedor.php");
+  require ("../modelo/buscarUbicacion.php");
 
 	$accion = 0;
 
@@ -18,29 +22,36 @@
 		$idServicio = $_POST['idServicio'];
 		$objSC = new ServicioProveedor();
 		$objSC->cargarProveedores($idServicio);
+
 	}elseif($accion == 'cargarProgramacionServicios'){   
-    $usuario  = $_SESSION['usuario'];    
-    $objSC = new ServicioProveedor(); 
-    $objSC->idUsuario = $usuario;
-    $objSC->vistaServiciosP1();
+    include("../vista/proveedores/servicios/serviciosProveedor.php");
+  }elseif($accion == 'cargarServicios'){
+      $objSC = new Servicio();
+      $objSC->idCategoria = $_POST['idCategoria']; 
+      echo json_encode($objSC->listarPorCategoria());
+
+  }elseif($accion == 'cargarTablaServicios'){
+      $objSC = new Servicio();
+      $objSC->idCategoria = $_POST['idCategoria']; 
+      echo json_encode($objSC->listarPorCategoria());
+
   }elseif($accion == 'cargarListaProveedor'){	
 		include '../vista/proveedores/servicios/lista.php';
 	}elseif ($accion == 'modificar_servicio') {
 		$idServicio =$_POST['id'];
     $valor = $_POST['valor'];
 		$objSC = new ServicioProveedor();
-
 		$objSC->modificar($idServicio,$valor);
-	}elseif($accion == "guardarServicios"){
-    $usuario  = $_POST['idUsuario'];
-    $servicios = $_POST['servicios'];
-    $municipios = $_POST['municipios'];
-    $dias = $_POST['dias'];
-    $horas = $_POST['horas'];
 
+	}elseif($accion == "guardarServicios"){
     $obj = new ServicioProveedor();
-    $obj->idUsuario = $usuario;
-    $obj->guardar($usuario, $servicios, $municipios, $dias, $horas);    
+    $obj->idUsuario = $_SESSION['id'];
+    $obj->idServicio = $_POST['idServicio'];
+    $obj->valor = $_POST['valor'];
+    if($obj->guardar()){
+      include("../vista/proveedores/servicios/lista.php");
+    }
+
   }elseif($accion == "quitarMunicipio"){
     $obj = new ServicioProveedor();
     $obj->idUsuario = $_SESSION['id'];
@@ -69,6 +80,7 @@
     $obj = new ServicioProveedor();
     $obj->idUsuario = $usuario;
     $obj->colocarDia($dia);
+
   }elseif($accion == "quitarHora"){
     $usuario  = $_POST['idUsuario'];
     $hora = $_POST['hora'];

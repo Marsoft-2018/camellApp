@@ -30,13 +30,6 @@
       $objSC->cargarCombo($idCat);
       break;
 
-    case 'cargarServicios':
-      require("../modelo/servicio.php");
-      $idCat = $_POST['idCategoria'];
-      $objSC = new Servicio();
-      $objSC->cargarCombo($idCat);
-      break;
-
     case 'BuscarUsuario':
       $usuario = $_POST['usuario'];
       $objUsuario=new Usuario();                   
