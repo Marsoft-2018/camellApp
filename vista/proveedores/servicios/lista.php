@@ -35,7 +35,9 @@
 		    	<button class="btn btn-warning"  onclick="modificarServicio(this.id)" id="<?php echo $value['id'] ?>" ><i class="fa fa-pencil" title="Editar"> Cambiar Valor</i></button>		  	
 		  	</td>
 		  	<td>
-		    	<button class="btn btn-danger" onclick="eliminar_servicio(this.id)" id="<?php echo $value['id'] ?>" ><i class="fa fa-trash" title="Eliminar">Eliminar Servicio</i></button>		  
+		    	<button class="btn btn-danger" onclick="eliminar_servicioProveedor('<?php echo $value['id'] ?>')">
+		    		<i class="fa fa-trash" title="Eliminar">Eliminar Servicio</i>
+		    	</button>		  
 		  	</td>
 		</tr>
 	<?php 

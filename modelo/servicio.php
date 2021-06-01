@@ -64,7 +64,7 @@
 		}
 
 		public  function lista() {
-			$this->sql = "SELECT proveedorservicios.`id`, categorias.`nombre` as 'categoria', servicios.`nombre` as 'servicio', proveedorservicios.`valor` as 'valor' FROM proveedorservicios INNER JOIN `servicios` ON (`proveedorservicios`.`idServicio` = `servicios`.`id`) INNER JOIN `categorias` ON categorias.`id` = servicios.`idcategoria` WHERE proveedorservicios.`idProveedor`= ?";
+			$this->sql = "SELECT proveedorservicios.`id`, categorias.`nombre` as 'categoria', servicios.`nombre` as 'servicio', proveedorservicios.`valor` as 'valor' FROM proveedorservicios INNER JOIN `servicios` ON (`proveedorservicios`.`idServicio` = `servicios`.`id`) INNER JOIN `categorias` ON categorias.`id` = servicios.`idcategoria` WHERE proveedorservicios.`idProveedor`= ? AND proveedorservicios.activo = 1 ";
 			try {
 				$stm = $this->Conexion->prepare($this->sql);
 				$stm->bindparam(1,$this->idUsuario);

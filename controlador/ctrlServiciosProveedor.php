@@ -51,6 +51,13 @@
     if($obj->guardar()){
       include("../vista/proveedores/servicios/lista.php");
     }
+  }elseif($accion == "quitarServicios"){
+    $obj = new ServicioProveedor();
+    $obj->idUsuario = $_SESSION['id'];
+    $obj->idServicio = $_POST['idServicio'];
+    if($obj->quitar()){
+      include("../vista/proveedores/servicios/lista.php");
+    }
 
   }elseif($accion == "quitarMunicipio"){
     $obj = new ServicioProveedor();

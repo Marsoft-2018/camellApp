@@ -45,7 +45,7 @@ if (isset($_POST['accion'])) {
 				<input type="number" class="form form-control" value="" id="valorServicio">
 			</div>
 			<div class='col-md-2' style="padding: 0px; text-align: center;overflow: auto;">
-				<button class="btn btn-primary" id='agregar' onclick="agregarSeleccionado()" style="padding: 5px 30px;margin-top: 30px;">
+				<button class="btn btn-primary" id='agregar' onclick="agregarServicioProveedor()" style="padding: 5px 30px;margin-top: 30px;">
 					<i class="fa fa-plus">Agregar</i> 
 				</button>
 			</div>

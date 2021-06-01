@@ -84,19 +84,13 @@ function modificarServicio(id) {
     });
 }
 
-$("#agregar").click(function(){		
-  agregarSeleccionado();
-});
-
-$("#quitar").click(function(){ quitarSeleccionado(); });
-
 //agregar opciones
 $('#servicios option').dblclick(function(){ agregarSeleccionado(); });
 
 //remover opciones
 $('#servicioSeleccionado option').dblclick(function(){  quitarSeleccionado(); });
 
-function agregarSeleccionado(){
+function agregarServicioProveedor(){
   var idServicio = $("#cmb_servicios").val();
   var valor = $("#valorServicio").val();
   $.ajax({
@@ -112,16 +106,18 @@ function agregarSeleccionado(){
   });
 }
 
-function quitarSeleccionado(){
-  var valor = $('#servicioSeleccionado option:selected').val();
-  var clave = serviciovalue.indexOf(valor);
-  serviciotxt.splice(clave,1); 
-  serviciovalue.splice(clave,1);
-  for(i=0; i<serviciovalue.length; i++){
-    console.log(serviciovalue[i]+" "+serviciotxt[i]);    
-  }
-
-  $('#servicioSeleccionado option[value="' + valor + '"]').remove();  
+function eliminar_servicioProveedor(idServicio){
+  $.ajax({
+    type:"POST",
+    url: "controlador/ctrlServiciosProveedor.php",
+    data:{accion:"quitarServicios", idServicio:idServicio},
+    success:function(data){
+      $("#listaServicios").html(data);
+    },
+    error:function(err){
+      console.log('test: '+err);
+    }
+  }); 
 }
 
 function agregarMunicipioSeleccionado(){

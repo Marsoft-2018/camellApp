@@ -473,6 +473,22 @@
 			}		    
 		}
 
+		public function quitar(){
+			$this->sql = "UPDATE proveedorservicios SET activo = 2 WHERE idProveedor = ? AND id = ?";
+			try {
+				$stm = $this->Conexion->prepare($this->sql);
+				$stm->bindparam(1,$this->idUsuario);	
+				$stm->bindparam(2,$this->idServicio);
+				if($stm->execute()){
+					return true;
+				}else{
+					return false;
+				}
+			} catch (Exception $e) {
+				echo "Error: ".$e;
+			}		    
+		}
+
 		public function guardarDisponibilidadDias($idProv, $dias){
 			//Se llena la tabla de la disponibilidad en días
 		    foreach ($dias as $clave => $value) {
