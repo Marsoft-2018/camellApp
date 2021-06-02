@@ -6,8 +6,8 @@
 		public $idUsuario;
 		public $idServicio;
 		public $valor;
-		//public $dias = array("Lun","Mar","Mie","Jue","Vie","Sab","Dom"); 
-		public $dias = array("Mon","Tue","Wed","Thu","Fri","Sat","Sun"); 			
+		public $dias = array("Lun","Mar","Mie","Jue","Vie","Sab","Dom"); 
+		//public $dias = array("Mon","Tue","Wed","Thu","Fri","Sat","Sun"); 			
 
 		public function cargarProveedores($idServicio){		
 			$this->sql = mysql_query("SELECT pr.* FROM proveedores pr INNER JOIN proveedorservicios ps ON ps.`idProveedor` = pr.`id` WHERE ps.`idServicio` = '$idServicio' AND ps.`activo` = 1 ORDER BY pr.`apellidos`,pr.`nombres`; ");
@@ -121,341 +121,6 @@
 		    }           
 		}
 
-		public function vistaServiciosP1(){
-			if($this->hayServiciosCargados()){
-				$this->vistaServiciosP3();
-			}else{
-			?>
-				<div id="programacion">
-                <h3>PLANEACIÓN DE LOS SERVICIOS </h3>
-                <span id="marcoServicios">
-	               	<div class='row'>
-                		<h2>1.) Escoge tus Servicios</h2>                 		
-						<div class='col-md-5' style="height:300px;padding: 40px 20px; overflow: auto;">
-							<?php 
-								//_POST['usuario'];							
-								$obj = new ServicioProveedor();
-								$obj->listarSeleccionarServicios();
-							?>
-						</div>
-						<div class='col-md-2' style="padding: 0px; text-align: center;overflow: auto;">
-							<button class="btn btn-primary" id='agregar' onclick="agregarSeleccionado()" style="padding: 20px 30px;margin-top: 40px;">
-								<i class="fa fa-angle-double-right"></i> 
-							</button>
-							<button class="btn btn-primary" id='quitar' style="padding: 20px 30px;margin-top: 40px;"><i class="fa fa-angle-double-left"></i> </button>
-						</div>
-						<div class='col-md-5' style="height:300px; padding: 40px 20px;">
-							<p>Servicios Seleccionados</p>
-							<select multiple name="servicioSeleccionado" id="servicioSeleccionado" class="listaServicios" ondblclick = 'quitarSeleccionado()' style="height: 100%;">								
-								
-							</select>
-						</div>
-					</div>
-					<div class='row'>
-						<h2>2.) Escoge el lugar donde prestarás tus servicios</h2> 
-						<div class='col-md-5' style="height:300px;padding: 40px 20px;">
-							<?php 
-								//_POST['usuario'];							
-								$obj = new ServicioProveedor();
-								$obj->listarCiudades($this->idUsuario);
-							?>
-						</div>
-						<div class='col-md-2' style="padding: 20px; text-align: center;overflow: auto;">
-							<button class="btn btn-primary" id='agregarMunicipio' onclick = 'agregarMunicipioSeleccionado()' style="padding: 20px 30px;margin-top: 40px;">
-								<i class="fa fa-angle-double-right"></i> 
-							</button>
-							<button class="btn btn-primary" id='quitarMunicipio' onclick='quitarMunicipioSeleccionado()' style="padding: 20px 30px;margin-top: 40px;"><i class="fa fa-angle-double-left"></i> </button>
-						</div>
-						<div class='col-md-5' style="height:300px; padding: 40px 20px;">
-							<p>Lugares Seleccionados</p>
-							<select multiple name="municipioSeleccionado" id="municipioSeleccionado" class="listaServicios" style="height: 100%;" ondblclick = 'quitarMunicipioSeleccionado()'>								
-							</select>
-						</div>
-					</div>
-					<div class='row'>
-						<h2>3.) Horario en el que estarás disponible</h2> 
-						<div class='col-md-12' style="padding:40px 20px;">
-							<div class="row">
-								<div class="col-md-12">
-									<h2>Días</h2>							
-									<div class="panel">
-									 	<table class="table">
-									 		<thead>
-									 			<tr >
-									 				<th style='text-align:center;'>Lun</th>
-									 				<th style='text-align:center;'>Mar</th>
-									 				<th style='text-align:center;'>Mie</th>
-									 				<th style='text-align:center;'>Jue</th>
-									 				<th style='text-align:center;'>Vie</th>
-									 				<th style='text-align:center;'>Sab</th>
-									 				<th style='text-align:center;'>Dom</th>
-									 			</tr>
-									 		</thead>
-									 		<tbody>
-												<tr>
-													<?php
-									 					foreach ($this->dias as $d) {
-									 						echo "<td style='text-align:center;'>".
-									 							"<input type='checkbox' class='form form-control' name='diaSel' value='".$d."' onclick='seleccionDia(this.value)'>".
-									 						"</td>";
-									 					}
-									 				?>
-												</tr>
-											</tbody>
-									 	</table>
-									</div> 								
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-12">
-									<h2>Horas</h2>							
-									<div class="panel">									 	
-									 	<table class="table">
-									 		<thead>
-									 			<tr >
-									 				<th></th>
-									 				<?php
-									 					for($i = 1;$i <= 12;$i++) {
-									 						echo "<th style='text-align:center;'>$i:00</th>";
-									 					}
-									 				?>
-									 			</tr>
-									 		</thead>
-									 		<tbody>
-												<tr>
-													<td>A.M</td>
-													<?php
-									 					for($i = 1;$i <= 12;$i++) {
-									 						echo "<td style='text-align:center;'>";
-									 						
-									 							echo "<input type='checkbox' class='form form-control' name='diaSel' id = ''  value='$i' onclick='seleccionHora(this)'>";
-									 						echo "</td>"; 						
-									 					}
-									 				?>
-												</tr>
-												<tr>
-													<td>P.M</td>
-													<?php
-									 					for($i = 13;$i <= 24;$i++) {
-									 						echo "<td style='text-align:center;'>";
-									 						echo "<input type='checkbox' class='form form-control' name='diaSel' id = ''  value='$i' onclick='seleccionHora(this)'>";
-									 						echo "</td>";
-									 					}
-									 				?>
-												</tr>
-											</tbody>
-									 	</table>
-									</div> 								
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="row" style="text-align: center; padding: 0px;">
-						<div class='col-md-2' id='divBotonContinuar' >
-							<button class='btn btn-primary' onclick='guardarServiciosProveedor()' style="padding: 15px 30px;">	Guardar
-							</button> 
-						</div>
-						<div class="clear-fix"></div>
-						<div class="col-xs-5 col-md-5">
-							<span id="resultadoGuardar"></span>
-						</div>					
-					</div>
-				</span>			
-			<?php 
-			}
-		}
-
-		public function vistaServiciosP2(){
-			$idUsuario = $this->idUsuario;
-			$objServicio = new  Servicio();
-			$res =	$objServicio->lista($idUsuario);
-	     
-		   	$resul = array();
-		   	$cont = 0; 
-		   	echo "<h3> LISTA DE SUS SERVICIOS </h3>".
-		   	  	"<div class='alert alert-info'>
-                  	A continuacion, Por favor establezca el valor para cada uno de los servicios. tenga en cuenta que sobre el valor colocado se aplica el porcentaje de cobro establecido por vitriservicios colombia.
-              	</div>".
-		   	"<table class='table'>".
-			    "<thead>".
-			      "<tr>".
-			       "<th scope='col'>ID</th>".
-			        "<th scope='col'>Categoria</th>".
-			        "<th scope='col'>Servicios</th>".
-		          "<th scope='col'>Valor</th>".
-			       "<th scope='col' colspan='3'>Accion</th>".
-			     "</tr>".
-			    "</thead>".
-			    "<tbody>";
-
-		     	while ($r = mysql_fetch_array($res)) {
-		    		echo "<tr>";
-		      		echo "<td>".$r[0]."</td>";
-		      		echo "<td><p>".strtoupper($r[1])."</p></td>";
-		      		echo "<td><p>".strtoupper(utf8_encode($r[2]))."</p></td>";
-		          echo "<td><input type='number' name='valorServicio' id='valorServicio$r[0]' class='form form-control' value='".$r[3]."' placeholder='Valor del Servicio'></td>";
-		    		  echo "<td>";
-		    		    echo 	"<button class='btn btn-warning'  onclick='modificarServicio(this.id)' id='$r[0]' ><i class='fa fa-pencil' title='Editar'> Cambiar Valor</i></button>";
-		    		  echo "</td>";
-		    		  echo "<td>";
-		    		    echo 	"<button class='btn btn-danger' onclick='eliminar_servicio(this.id)' id='$r[0]' ><i class='fa fa-trash' title='Eliminar'>Eliminar Servicio</i></button>";
-		    		  echo "</td>";
-		    		echo "</tr>";
-		    	}
-
-		     	echo "</tbody>";
-	      echo "</table>";	      
-		}
-
-		public function vistaServiciosP3(){
-			$sqlProv = mysql_query("SELECT id FROM proveedores WHERE usuario = '".$this->idUsuario."'");
-			$idProv;
-			while($id = mysql_fetch_array($sqlProv)){
-				$idProv = $id[0];
-			}
-			?>
-				<div id="programacion">
-                <h2>DISPONIBILIDAD</h2>
-                <span id="marcoServicios">	               	
-					<div class='row about-grid about-grid1 wow fadeInLeft' style = "color: #fff; padding: 10px 40px;">
-						<h2>2.) Escoge el lugar donde prestarás tus servicios</h2> 
-						<div class='col-md-5 about-grid-info' style = "height:300px; padding: 40px 20px;">
-							<?php 
-								//_POST['usuario'];							
-								$obj = new ServicioProveedor();
-								$obj->listarCiudades($this->idUsuario);
-							?>
-						</div>
-						<div class='col-md-2' style="padding: 20px; text-align: center;overflow: auto;">
-							<button class="btn btn-primary" id='agregarMunicipio' onclick = 'agregarMunicipioSeleccionadoTabla(<?php echo $idProv; ?>)' style="padding: 20px 30px;margin-top: 40px;">
-								<i class="fa fa-angle-double-right"></i> 
-							</button>
-							<button class="btn btn-primary" id='quitarMunicipio' onclick='quitarMunicipioSeleccionadoTabla(<?php echo $idProv; ?>)' style="padding: 20px 30px;margin-top: 40px;"><i class="fa fa-angle-double-left"></i> </button>
-						</div>
-						<div class='col-md-5' style="height:300px; padding: 40px 20px;">
-							<p>Lugares Seleccionados</p>
-							<select multiple name="municipioSeleccionado" id="municipioSeleccionado" class="listaServicios" style="height: 100%;" ondblclick = 'quitarMunicipioSeleccionadoTabla(<?php echo $idProv; ?>)'>	
-								<?php
-
-									$this->sql = mysql_query("SELECT ra.idMunicipio, m.`nombre` FROM rango_accion_servicios ra INNER JOIN municipios m ON m.`id` = ra.`idMunicipio` WHERE ra.idProveedor ='".$idProv."' and ra.`estado` = '1';");
-									while($mun = mysql_fetch_array($this->sql) ){
-										echo "<option value='$mun[0]'>".utf8_encode($mun[1])."</option>";
-									} 
-								?>
-
-							</select>
-						</div>
-						<span id="resMunicipio"></span>
-					</div>
-					<div class='row about-grid about-grid2 wow fadeInUp' style='background-color: #C3CA9C; margin-top: 20px;'>
-						<h2>3.) Horario en el que estarás disponible</h2> 
-						<div class='col-md-12 about-grid-pic' style="padding:40px 20px;">
-							<div class="row">
-								<div class="col-md-12">
-									<h2>Días</h2>							
-									<div class="panel">
-									 	<table class="table">
-									 		<thead>
-									 			<tr >
-									 				<?php
-									 					foreach ($this->dias as $d) {
-									 						echo "<th style='text-align:center;'>$d</th>";
-									 					}
-									 				?>
-									 			</tr>
-									 		</thead>
-									 		<tbody>
-												<tr>
-													<?php
-									 					foreach ($this->dias as $d) {
-									 						echo "<td style='text-align:center;'>".
-									 							"<span id='dia".$idProv.$d."'>";
-									 						$sqlDia = mysql_query("SELECT * FROM disponibilidad_dias WHERE idProveedor = ".$idProv." AND Dias = '".$d."' AND estado = 1;");
-									 						$rd = mysql_num_rows($sqlDia);
-									 						if($rd > 0){
-									 							echo "<input type='checkbox' class='form form-control' name='diaSel'  id = '".$idProv."' value='".$d."' onclick='quitarDia(this.id,this.value)' checked>";
-									 						}else{
-									 							echo "<input type='checkbox' class='form form-control' name='diaSel' id = '".$idProv."'  value='".$d."' onclick='colocarDia(this.id,this.value)'>";
-									 						}
-									 						echo 	"</span>";  		
-									 						echo "</td>";
-									 					}
-									 				?>
-												</tr>
-											</tbody>
-									 	</table>
-									</div> 								
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-12" >
-									<h2>Horas</h2>							
-									<div class="panel" style="overflow: auto;" id='panelHorario' >
-									 	<table class="table">
-									 		<thead>
-									 			<tr >
-									 				<th></th>
-									 				<?php
-									 					for($i = 1;$i <= 12;$i++) {
-									 						echo "<th style='text-align:center;'>$i:00</th>";
-									 					}
-									 				?>
-									 			</tr>
-									 		</thead>
-									 		<tbody>
-												<tr>
-													<td>A.M</td>
-													<?php
-									 					for($i = 1;$i <= 12;$i++) {
-									 						echo "<td style='text-align:center;'>".
-									 							"<span id='hora".$idProv.$i."'>";
-									 						$sqlHora = mysql_query("SELECT * FROM disponibilidad_horas WHERE idProveedor = ".$idProv." AND Hora ='".$i."' AND estado = 1;");
-									 						$rd = mysql_num_rows($sqlHora);
-									 						if($rd > 0){
-									 							echo "<input type='checkbox' class='form form-control' name='diaSel'  id = '".$idProv."' value='$i' onclick='quitarHora(this.id,this.value)' checked>";
-									 						}else{
-									 							echo "<input type='checkbox' class='form form-control' name='diaSel' id = '".$idProv."'  value='$i' onclick='colocarHora(this.id,this.value)'>";
-									 						}
-									 						echo 	"</span>";  		
-									 						echo "</td>"; 						
-									 					}
-									 				?>
-												</tr>
-												<tr>
-													<td>P.M</td>
-													<?php
-									 					for($i = 13;$i <= 24;$i++) {
-									 						echo "<td style='text-align:center;'>".
-									 							"<span id='hora".$idProv.$i."'>";
-									 						$sqlHora2 = mysql_query("SELECT * FROM disponibilidad_horas WHERE idProveedor = ".$idProv." AND Hora ='".$i.":00' AND estado = 1;");
-									 						$rd = mysql_num_rows($sqlHora2);
-									 						if($rd > 0){
-									 							echo "<input type='checkbox' class='form form-control' name='diaSel'  id = '".$idProv."' value='$i' onclick='quitarHora(this.id,this.value)' checked>";
-									 						}else{
-									 							echo "<input type='checkbox' class='form form-control' name='diaSel' id = '".$idProv."'  value='$i' onclick='colocarHora(this.id,this.value)'>";
-									 						}
-									 						echo 	"</span>";  		
-									 						echo "</td>";
-									 					}
-									 				?>
-												</tr>
-											</tbody>
-									 	</table>
-									</div> 								
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="row" style="text-align: center; padding: 0px;">						
-						<div class="clear-fix"></div>
-						<div class="col-xs-5 col-md-5">
-							<span id="resultadoGuardar"></span>
-						</div>					
-					</div>
-				</span>			
-			<?php
-		}
-
 		public function guardar(){
 			$this->sql = "INSERT INTO proveedorservicios(idProveedor, idServicio,valor) VALUES(?, ?, ?)";
 			try {
@@ -489,6 +154,41 @@
 			}		    
 		}
 
+		public function cargarDisponibilidadDias($dia){
+			$estado = false;
+			$this->sql = "SELECT * FROM disponibilidad_dias WHERE idProveedor = ? AND Dias = ? AND estado = 1";  
+		    try {
+		    	$stm = $this->Conexion->prepare($this->sql);
+		    	$stm->bindparam(1,$this->idUsuario);
+		    	$stm->bindparam(2,$dia);
+		    	$stm->execute();
+		    	$data = $stm->fetchAll(PDO::FETCH_ASSOC);
+		    	foreach ($data as $value) {
+		    		$estado = true;
+		    	}
+		    	return $estado;
+		    } catch (PDOException $e) {
+		    	echo "Error: ".$e;
+		    }
+		}
+
+		public function cargarDisponibilidadHoras($hora){
+			$estado = false;
+			$this->sql = "SELECT * FROM disponibilidad_horas WHERE idProveedor = ? AND Hora = ? AND estado = 1";  
+		    try {
+		    	$stm = $this->Conexion->prepare($this->sql);
+		    	$stm->bindparam(1,$this->idUsuario);
+		    	$stm->bindparam(2,$hora);
+		    	$stm->execute();
+		    	$data = $stm->fetchAll(PDO::FETCH_ASSOC);
+		    	foreach ($data as $value) {
+		    		$estado = true;
+		    	}
+		    	return $estado;
+		    } catch (PDOException $e) {
+		    	echo "Error: ".$e;
+		    }
+		}
 		public function guardarDisponibilidadDias($idProv, $dias){
 			//Se llena la tabla de la disponibilidad en días
 		    foreach ($dias as $clave => $value) {

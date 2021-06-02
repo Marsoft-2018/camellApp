@@ -14,7 +14,7 @@
         
         public function Validar(){            
             if($this->tipo === "clientes"){
-                $this->sql = "SELECT us.id, us.usuario, us.contrasena FROM usuariosclientes us WHERE us.`usuario`= '".$this->usuario."' AND us.`contrasena`= AES_ENCRYPT('".$this->contrasena."','Makers2018') AND us.`activo`='1' ";                
+                $this->sql = "SELECT * FROM clientes WHERE `usuario`= ? AND `contrasena`= ? AND `activo`='1' ";                
             }elseif($this->tipo === "proveedores"){
                 $this->sql = "SELECT * FROM proveedores WHERE `usuario`= ? AND `contrasena`= ? AND `activo`='1' ";
             }
